@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<rss version="0.91">
+  <channel>
+    <title>Project Gutenberg Recently Posted or Updated EBooks</title>
+    <link>http://www.gutenberg.org</link>
+    <description>
+       EBooks posted or updated today on Project Gutenberg.
+       This feed is regenerated every night.
+    </description>
+    <language>en-us</language>
+    <webMaster>webmaster@gutenberg.org (Marcello Perathoner)</webMaster>
+    <pubDate>Sat, 15 Jan 2022 05:51:40 -0500</pubDate>
+    <lastBuildDate>Sat, 15 Jan 2022 05:51:40 -0500</lastBuildDate>
+    <item>
+      <title>Der Bürger by Leonhard Frank</title>
+      <link>http://www.gutenberg.org/ebooks/67161</link>
+      <description>Language: German</description>
+    </item>
+
+    <item>
+      <title>Helena by Machado de Assis</title>
+      <link>http://www.gutenberg.org/ebooks/67162</link>
+      <description>Language: Portuguese</description>
+    </item>
+
+    <item>
+      <title>Salve Venetia, gleanings from Venetian history; vol. II by F. Marion  Crawford</title>
+      <link>http://www.gutenberg.org/ebooks/67156</link>
+      <description>Language: English</description>
+    </item>
+
+    <item>
+      <title>Lente by Jac. P.  Thijsse</title>
+      <link>http://www.gutenberg.org/ebooks/67159</link>
+      <description>Language: Dutch</description>
+    </item>
+
+    <item>
+      <title>La grande artère de la Chine: le Yangtseu by Joseph Dautremer</title>
+      <link>http://www.gutenberg.org/ebooks/67163</link>
+      <description>Language: French</description>
+    </item>
+
+    <item>
+      <title>Ballads and Other Poems by George Lansing Raymond</title>
+      <link>http://www.gutenberg.org/ebooks/67152</link>
+      <description>Language: English</description>
+    </item>
+
+    <item>
+      <title>The Crime of Henry Vane: A Study with a Moral by J. S. of Dale</title>
+      <link>http://www.gutenberg.org/ebooks/67164</link>
+      <description>Language: English</description>
+    </item>
+
+    <item>
+      <title>In the Garden of the Gods by William McLeod Raine</title>
+      <link>http://www.gutenberg.org/ebooks/67165</link>
+      <description>Language: English</description>
+    </item>
+
+  </channel>
+</rss>
