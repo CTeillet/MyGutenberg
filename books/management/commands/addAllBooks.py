@@ -1,5 +1,3 @@
-import json
-
 from django.core.management import BaseCommand
 import requests
 import tarfile
