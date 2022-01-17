@@ -11,6 +11,7 @@ class Book(models.Model):
     published_at = models.DateField()
     created_at = models.DateTimeField(auto_now_add=True)
     downloaded = models.BooleanField(default=False)
+    download_link = models.CharField(max_length=255, default='')
 
     class Meta:
         ordering = ('gutenbergID',)

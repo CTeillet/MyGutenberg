@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="db" uuid="a86d47a2-a506-489e-bf22-fd778efadc2e">
+    <data-source source="LOCAL" name="db" uuid="acd21ee1-9ea1-4e84-b02e-e9547b05bbd1">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:C:\Users\teill\PycharmProjects\mygutenberg\db.sqlite3</jdbc-url>
+      <jdbc-url>jdbc:sqlite:C:\Users\teill\PycharmProjects\MyGutenberg\db.sqlite3</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
       <libraries>
         <library>

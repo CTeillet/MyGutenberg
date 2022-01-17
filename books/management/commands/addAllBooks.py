@@ -39,19 +39,25 @@ class Command(BaseCommand):
                 modified = tree.find(".//dcterms:modified", ns)
                 subject = tree.find(".//dcterms:subject//rdf:Description//rdf:value", ns)
                 type = tree.find(".//dcterms:type//rdf:Description//rdf:value", ns)
-                print("Creating Book")
+                download_links = tree.findall(".//dcterms:hasFormat//pgterms:file", ns)
+                download_link = ''
+                for download_link_temp in download_links:
+                    link = download_link_temp.attrib['{'+ns['rdf']+'}about']
+                    if link.split('.')[-1] == 'txt':
+                        download_link = link
+                print("Checking Information")
                 l = [title, author, language, issued, modified, subject, type]
                 for i in range(len(l)):
                     if l[i] is None:
                         l[i] = ''
                     else:
                         l[i] = l[i].text
-                if type != '':
+                if l[-1] != '':
                     continue
-
+                print("Creating Book")
                 b = Book(gutenbergID=member.name.split('/')[2], title=l[0], author=l[1],
                          description=l[5], language=l[2], published_at=l[3],
-                         created_at=l[4])
+                         created_at=l[4], download_link=download_link)
                 print("Saving Book " + member.name.split('/')[2])
                 try:
                     b.save()

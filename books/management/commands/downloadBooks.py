@@ -1,3 +1,4 @@
+import requests
 from django.core.management import BaseCommand
 
 from books.models import Book
@@ -9,7 +10,9 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         print('Downloading books...')
         bs = Book.objects.filter(downloaded=False)
-        print(len(bs))
-        french_books = bs.filter(language='fr')
-        print(len(french_books))
+        for book in bs:
+            self.download_book(book)
+    def download_book(self, book):
+        r = requests.get(book.url, stream=True)
+        open('temp/ebooks/'+book.gutenbergID, 'wb').write(r.content)
 
