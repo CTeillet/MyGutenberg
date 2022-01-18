@@ -17,9 +17,9 @@ class Command(BaseCommand):
         print('Downloading Data...')
         r = requests.get(url, allow_redirects=True)
         print('Saving Data...')
-        open('temp/rdf-files.tar.bz2', 'wb').write(r.content)
+        open('ressources/rdf-files.tar.bz2', 'wb').write(r.content)
         print('Reading Data...')
-        tar = tarfile.open('temp/rdf-files.tar.bz2')
+        tar = tarfile.open('ressources/rdf-files.tar.bz2')
         members = tar.getmembers()
         for member in members:
             if member.name.endswith('.rdf'):
@@ -30,7 +30,6 @@ class Command(BaseCommand):
                 ns = {"dcterms": "http://purl.org/dc/terms/", "pgterms": "http://www.gutenberg.org/2009/pgterms/",
                       "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
                       'rdf': "http://www.w3.org/1999/02/22-rdf-syntax-ns#"}
-
                 print("Searching for data")
                 title = tree.find(".//dcterms:title", ns)
                 author = tree.find(".//pgterms:name", ns)
@@ -53,6 +52,8 @@ class Command(BaseCommand):
                     else:
                         l[i] = l[i].text
                 if l[-1] != '':
+                    continue
+                if download_link == '':
                     continue
                 print("Creating Book")
                 b = Book(gutenbergID=member.name.split('/')[2], title=l[0], author=l[1],
