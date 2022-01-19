@@ -14,9 +14,10 @@ class Command(BaseCommand):
             print("Reading file")
             lines = f.readlines()
             for line in lines:
-                print("Adding word: " + line)
+                word = line.strip()
+                print("Adding word: " + word)
                 try:
-                    BlacklistWords.objects.create(word=line)
+                    BlacklistWords.objects.create(word=word)
                 except IntegrityError:
                     print("Word already in database")
         print("Blacklist Words created")
