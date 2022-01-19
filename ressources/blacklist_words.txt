@@ -43,7 +43,6 @@ dans
 avec
 sans
 dont
-donc
 si
 celui-ci
 celui-la
@@ -76,7 +75,6 @@ lesquels
 lesquelles
 lesquelle
 laquel
-auquel
 auxquel
 auxquels
 tout
@@ -113,7 +111,6 @@ nulles
 quelqu'un
 quelqu'une
 quelques
-aucuns
 I
 me
 you
@@ -167,3 +164,7 @@ someone
 something
 that
 whom
+the
+and
+for
+his

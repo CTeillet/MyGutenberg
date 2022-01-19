@@ -1,4 +1,5 @@
 from django.core.management import BaseCommand
+from django.db import IntegrityError
 
 from books.models import Book, BlacklistWords
 
@@ -12,9 +13,10 @@ class Command(BaseCommand):
         with open("ressources/blacklist_words.txt") as f:
             print("Reading file")
             lines = f.readlines()
-            print(lines)
             for line in lines:
                 print("Adding word: " + line)
-                b = BlacklistWords.objects.create(word=line)
-                print(b)
+                try:
+                    BlacklistWords.objects.create(word=line)
+                except IntegrityError:
+                    print("Word already in database")
         print("Blacklist Words created")

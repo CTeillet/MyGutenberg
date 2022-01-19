@@ -50,6 +50,5 @@ class BlacklistWords(models.Model):
     class Meta:
         ordering = ('word',)
 
-
     def __str__(self):
         return self.word
