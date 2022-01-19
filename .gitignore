@@ -1,2 +1,4 @@
 /ressources/ebooks
 /ressources/rdf-files.tar.bz2
+/db.sqlite3-journal
+/db.sqlite3
