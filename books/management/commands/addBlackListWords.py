@@ -9,8 +9,12 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         print("Creating Blacklist Words")
 
-        f = open("/ressources/blacklist_words.txt", 'w')
-        for l in f:
-            BlacklistWords.objects.create(word=l)
-        f.close()
+        with open("ressources/blacklist_words.txt") as f:
+            print("Reading file")
+            lines = f.readlines()
+            print(lines)
+            for line in lines:
+                print("Adding word: " + line)
+                b = BlacklistWords.objects.create(word=line)
+                print(b)
         print("Blacklist Words created")
