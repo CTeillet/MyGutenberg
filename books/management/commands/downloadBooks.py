@@ -10,11 +10,15 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         print('Downloading books...')
         bs = Book.objects.filter(downloaded=False)
-        nb_books_downloaded = len(Book.objects.filter(downloaded=True))
-        i = 0
-        while nb_books_downloaded + i < 4000:
-            self.download_book(bs[i])
-            i += 1
+        if len(bs) == 0:
+            print('No books to download')
+        else:
+            nb_books_downloaded = len(Book.objects.filter(downloaded=True))
+            i = 0
+            while nb_books_downloaded + i < 4000:
+                print('Downloading book ' + bs[i].title)
+                self.download_book(bs[i])
+                i += 1
 
     def download_book(self, book):
         r = requests.get(book.download_link, stream=True)

@@ -13,7 +13,6 @@ class Command(BaseCommand):
         print("Creating index")
         bs = Book.objects.filter(downloaded=True, indexed=False)
         blacklist = BlacklistWords.objects.all()
-        blacklisted_words = blacklist.values_list('word', flat=True)
         for b in bs:
             print("Indexing book: {}".format(b.title))
             with open("ressources/ebooks/{}.txt".format(b.gutenbergID), 'r', encoding="utf8") as f:
@@ -30,11 +29,10 @@ class Command(BaseCommand):
                             index[word] += 1
                 print("Indexing words {}".format(len(index)))
                 for word in index:
-                    if len(word) > 2 and word not in blacklisted_words:
+                    if len(word) > 2 and not blacklist.filter(word=word).exists():
                         w, _ = Words.objects.get_or_create(word=word)
                         IndexWords.objects.create(idBook=b, idWord=w, count=index[word])
                 b.indexed = True
                 b.save()
                 print("Indexed: {}".format(b.title))
-                break
         print("Index created")

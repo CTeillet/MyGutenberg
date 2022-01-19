@@ -42,7 +42,7 @@ class Command(BaseCommand):
                 download_link = ''
                 for download_link_temp in download_links:
                     link = download_link_temp.attrib['{'+ns['rdf']+'}about']
-                    if link.split('.')[-1] == 'txt':
+                    if link.split('.')[-2] == 'txt' and link.split('.')[-1] == 'utf-8':
                         download_link = link
                 print("Checking Information")
                 l = [title, author, language, issued, modified, subject, type]
