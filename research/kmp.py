@@ -6,9 +6,9 @@ def kmp(pat, text, co):
         return -1
     i = 0
     j = 0
-    lens = text.length()
-    lenp = pat.length()
-    while i < lens and j < lenp:
+    len_str = text.length()
+    len_pat = pat.length()
+    while i < len_str and j < len_pat:
         if text.charAt(i) == pat.charAt(j):
             i += 1
             j += 1
@@ -16,8 +16,8 @@ def kmp(pat, text, co):
             i += 1
         else:
             j = co[j - 1] + 1
-    if j == lenp:
-        return i - lenp
+    if j == len_pat:
+        return i - len_pat
     return -1
 
 

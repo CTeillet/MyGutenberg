@@ -1,4 +1,4 @@
-from research.rg_symbole import CONCAT, ETOILE, ALTERN, DOT
+from research.regex_symbol import CONCAT, ETOILE, ALTERN, DOT
 
 
 class RegExTree:
@@ -24,3 +24,6 @@ class RegExTree:
         for st in self.sub_trees:
             result += st.toString() + ","
         return result + ")"
+
+    def __str__(self):
+        return self.to_string()
