@@ -52,3 +52,15 @@ class BlacklistWords(models.Model):
 
     def __str__(self):
         return self.word
+
+
+class JaccardDistance(models.Model):
+    idBook1 = models.ForeignKey(Book, on_delete=models.CASCADE, related_name='book1')
+    idBook2 = models.ForeignKey(Book, on_delete=models.CASCADE, related_name='book2')
+    distance = models.IntegerField(default=0)
+
+    class Meta:
+        unique_together = ('idBook1', 'idBook2')
+
+    def __str__(self):
+        return str(self.idBook1) + ' - ' + str(self.idBook2)
