@@ -1,10 +1,11 @@
 from django.core.management import BaseCommand
 
-from books.models import IndexWords, JaccardDistance
+from books.models import IndexWords, JaccardDistance, Book
 
 
 def get_index(i):
     """Create the the list of index words from the books i and return the list of index words from the books i."""
+    # Select idWord, count from IndexWords where idBook = i;
     return list(IndexWords.objects.filter(idBook=i).values_list('idWord', 'count'))
 
 
@@ -37,11 +38,16 @@ class Command(BaseCommand):
         """Create the Jaccard distance between all the books that are not already in the Jaccard table and are indexed.
         """
         print('create Jaccard Distance')
-
-        idBook1 = 1
-        idBook2 = 100
-        index1 = get_index(idBook1)
-        index2 = get_index(idBook2)
-        res = jaccard_distance(index1, idBook1, index2, idBook2)
-        JaccardDistance.objects.create(idBook1=idBook1, idBook2=idBook2, distance=res)
-        print(res)
+        books = IndexWords.objects.values_list('idBook', flat=True).distinct()
+        books_jaccard = JaccardDistance.objects.values_list('idBook1', 'idBook2').distinct()
+        for i in books:
+            for j in books:
+                if i != j and (i, j) not in books_jaccard and (j, i) not in books_jaccard:
+                    print(i, j)
+                    book1 = Book.objects.get(gutenbergID=i)
+                    book2 = Book.objects.get(gutenbergID=j)
+                    jaccard_distance_i_j = jaccard_distance(get_index(i), i, get_index(j), j)
+                    print('{} - {} : {}'.format(i, j, jaccard_distance_i_j))
+                    JaccardDistance(idBook1=book1, idBook2=book2, distance=jaccard_distance_i_j).save()
+                    print('Jaccard distance between book {} and {} is {}'.format(i, j, jaccard_distance_i_j))
+        print('Jaccard distance created')
