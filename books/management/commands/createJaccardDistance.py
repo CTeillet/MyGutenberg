@@ -1,4 +1,5 @@
 from django.core.management import BaseCommand
+from concurrent.futures import ThreadPoolExecutor
 
 from books.models import IndexWords, JaccardDistance, Book
 
@@ -39,15 +40,21 @@ class Command(BaseCommand):
         """
         print('create Jaccard Distance')
         books = IndexWords.objects.values_list('idBook', flat=True).distinct()
-        books_jaccard = JaccardDistance.objects.values_list('idBook1', 'idBook2').distinct()
-        for i in books:
-            for j in books:
-                if i != j and (i, j) not in books_jaccard and (j, i) not in books_jaccard:
-                    print(i, j)
-                    book1 = Book.objects.get(gutenbergID=i)
-                    book2 = Book.objects.get(gutenbergID=j)
-                    jaccard_distance_i_j = jaccard_distance(get_index(i), i, get_index(j), j)
-                    print('{} - {} : {}'.format(i, j, jaccard_distance_i_j))
-                    JaccardDistance(idBook1=book1, idBook2=book2, distance=jaccard_distance_i_j).save()
-                    print('Jaccard distance between book {} and {} is {}'.format(i, j, jaccard_distance_i_j))
+        paires_max = [(i, j) for i in books for j in books if i < j]
+        paires_exist = JaccardDistance.objects.values_list('idBook1', 'idBook2').distinct()
+        paires_to_create = [paire for paire in paires_max if paire not in paires_exist]
+        print(len(books))
+        with ThreadPoolExecutor(max_workers=50) as executor:
+            for i, j in paires_to_create:
+                executor.submit(self.traitement, i, j)
         print('Jaccard distance created')
+
+    def traitement(self, i, j):
+        print(i, j)
+        book1 = Book.objects.get(gutenbergID=i)
+        book2 = Book.objects.get(gutenbergID=j)
+        jaccard_distance_i_j = jaccard_distance(get_index(i), i, get_index(j), j)
+        print('{} - {} : {}'.format(i, j, jaccard_distance_i_j))
+        JaccardDistance(idBook1=book1, idBook2=book2, distance=jaccard_distance_i_j).save()
+        JaccardDistance(idBook1=book2, idBook2=book1, distance=jaccard_distance_i_j).save()
+        print('Jaccard distance between book {} and {} is {}'.format(i, j, jaccard_distance_i_j))
