@@ -1,4 +1,4 @@
-from research.regex_symbol import CONCAT, ETOILE, ALTERN, DOT
+from research.regex.regex_symbol import CONCAT, ETOILE, ALTERN, DOT
 
 
 class RegExTree:
