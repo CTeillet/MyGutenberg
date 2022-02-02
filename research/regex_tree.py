@@ -6,21 +6,21 @@ class RegExTree:
         self.root = root
         self.sub_trees = sub_trees
 
-    def root_to_string(self):
-        if self.rootroot == CONCAT:
-            return "."
+    def root_to_chr(self):
+        if self.root == CONCAT:
+            return '.'
         if self.root == ETOILE:
-            return "*"
+            return '*'
         if self.root == ALTERN:
-            return "|"
+            return '|'
         if self.root == DOT:
-            return "."
+            return '.'
         return chr(self.root)
 
     def to_string(self):
         if len(self.sub_trees) == 0:
-            return self.rootToString()
-        result = self.rootToString() + "(" + self.sub_trees[0].toString()
+            return self.root_to_chr()
+        result = self.root_to_chr() + "(" + self.sub_trees[0].toString()
         for st in self.sub_trees:
             result += st.toString() + ","
         return result + ")"

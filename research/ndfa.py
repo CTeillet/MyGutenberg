@@ -7,7 +7,7 @@ class NDFA:
     def __init__(self, rg_tree: rt.RegExTree):
         nb_states = count_states(rg_tree)
         self.transition_table = np.full((nb_states, 256), -1, dtype=int)
-        self.epsilon_transitions = [None for _ in range(nb_states)]
+        self.epsilon_transitions = np.full(nb_states, None, dtype=list)
         self.accept = np.full(nb_states, False, dtype=bool)
         self.sz = 0
         self.end = -1
@@ -15,7 +15,7 @@ class NDFA:
     def to_string(self) -> str:
         result = "Initial state: 0\nFinal state: " + str(self.end) + "\nTransition list:\n"
         i = 0
-        for e in range(len(self.epsilon_transitions)):
+        for e in self.epsilon_transitions:
             i += 1
             if e is not None:
                 for state in e:
@@ -25,6 +25,9 @@ class NDFA:
                 if self.transition_table[i][col] != -1:
                     result += "  " + chr(i) + " -- " + chr(col) + " --> " + self.transition_table[i][col] + "\n"
         return result
+
+    def increment_size(self, *, n=1):
+        self.sz += n
 
     def __str__(self):
         return self.to_string()
@@ -40,7 +43,7 @@ def count_states(rg_tree: rt.RegExTree):
         return succ - 1
     elif r == rs.ETOILE:
         return succ + 2
-    elif rs.ALTERN:
+    elif r == rs.ALTERN:
         return succ + 2
     else:
         return succ + 2
