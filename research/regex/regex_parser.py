@@ -2,14 +2,14 @@ import regex_tree as rt
 import regex_symbol as rs
 
 
-def parse_expression(expression):
+def parse_expression(expression: str) -> rt.RegExTree:
     result = []
     for c in expression:
         result.append(rt.RegExTree(rs.char_to_root(c)), [])
     return parse(result)
 
 
-def parse(result):
+def parse(result) -> rt.RegExTree:
     while contain_parenthese(result):
         result = process_parenthese(result)
     while contain_etoile(result):
@@ -144,7 +144,6 @@ def process_altern(trees):
         else:
             result.append(t)
     return result
-
 
 
 def remove_protection(tree):
