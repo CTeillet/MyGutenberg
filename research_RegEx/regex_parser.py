@@ -5,25 +5,19 @@ from research_RegEx import regex_symbol as rs
 def parse_expression(expression: str) -> rt.RegExTree:
     result = []
     for c in expression:
-        print(c)
         result.append(rt.RegExTree(rs.char_to_root(c), []))
     return parse(result)
 
 
 def parse(result) -> rt.RegExTree:
-    print(result, "0")
     while contain_parenthese(result):
         result = process_parenthese(result)
-    print(result, "1")
     while contain_etoile(result):
         result = process_etoile(result)
-    print( len(result[0].sub_trees), "2")
     while contain_concat(result):
         result = process_concat(result)
-    print(result, "3")
     while contain_altern(result):
         result = process_altern(result)
-    print(result, "4")
     if len(result) > 1:
         raise Exception
     return remove_protection(result[0])

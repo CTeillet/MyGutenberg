@@ -4,6 +4,8 @@ from research_RegEx.dfa import TempDFA, DFA
 from research_RegEx.ndfa import NDFA
 
 
+# Parse
+
 def grouping_by_epsilon(automata: NDFA, state: int):
     res = {state}
     if automata.epsilon_transitions[state] is not None:
@@ -16,7 +18,6 @@ def grouping_by_epsilon(automata: NDFA, state: int):
 
 def parse_dfa(automata: NDFA):
     dfa = TempDFA(automata.sz)
-
     dfa.grouped_states.append(grouping_by_epsilon(automata, 0))
     parse_dfa_node(dfa, automata, 0)
     return DFA(dfa)
@@ -30,7 +31,7 @@ def parse_dfa_node(dfa, ndfa, i):
     # Search all the transitions from the set
     for state in dfa.grouped_states[i]:
         for col in range(len(ndfa.transition_table[state])):
-            if ndfa.transition_table[state][col] is not None:
+            if ndfa.transition_table[state][col] != -1:
                 # update the transition table
                 gs = grouping_by_epsilon(ndfa, ndfa.transition_table[state][col])
                 dfa.transitions[i][col] = gs
@@ -38,13 +39,14 @@ def parse_dfa_node(dfa, ndfa, i):
                 if gs not in dfa.grouped_states:
                     dfa.grouped_states.append(gs)
         # update accept
-        print(len(dfa.accept))
         dfa.accept[i] = dfa.accept[i] or ndfa.accept[state]
     parse_dfa_node(dfa, ndfa, i + 1)
 
 
-# Minimization
+# --------------------------------------------------------------
 
+
+# Minimization
 
 def grouping_minimization(min_table, state, res):
     res.add(state)
@@ -117,7 +119,9 @@ def minimize_dfa(dfa: DFA):
     min_table = get_min_table(dfa)
     # make the link between an old state and a group
     old_sets = np.full(dfa.size, None, dtype=set)
+    # make the link between a new state and a group of old states
     new_sets = []
+    # extract all the groups
     for i in range(dfa.size):
         if old_sets[i] is None:
             g = set()
@@ -127,7 +131,6 @@ def minimize_dfa(dfa: DFA):
             new_sets.append(g)
 
     sz = len(new_sets)
-
     if sz == old_sets.size:
         return
 
@@ -144,13 +147,6 @@ def minimize_dfa(dfa: DFA):
                 transitions_res[i][col] = new_state
         accept_res[i] = dfa.accept[line]
         i += 1
+    dfa.size = sz
     dfa.accept = accept_res
     dfa.transitions = transitions_res
-
-
-
-
-
-
-
-

@@ -16,9 +16,7 @@ def char_to_root(c: chr) -> int:
     if c == '|':
         return ALTERN
     if c == '(':
-        print('PARENTHESE OUVRANTE')
         return PARENTHESEOUVRANT
     if c == ')':
-        print('PARENTHESE FERMANTE')
         return PARENTHESEFERMANT
     return ord(c)
