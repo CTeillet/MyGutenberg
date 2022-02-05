@@ -34,6 +34,16 @@ def find_nb(idBook, idWord):
     return res
 
 
+def traitement(i, j):
+    print(i, j)
+    book1 = Book.objects.get(gutenbergID=i)
+    book2 = Book.objects.get(gutenbergID=j)
+    jaccard_distance_i_j = jaccard_distance(get_index(i), i, get_index(j), j)
+    print('{} - {} : {}'.format(i, j, jaccard_distance_i_j))
+    JaccardDistance(idBook1=book1, idBook2=book2, distance=jaccard_distance_i_j).save()
+    print('Jaccard distance between book {} and {} is {}'.format(i, j, jaccard_distance_i_j))
+
+
 class Command(BaseCommand):
     def handle(self, *args, **options):
         """Create the Jaccard distance between all the books that are not already in the Jaccard table and are indexed.
@@ -46,15 +56,5 @@ class Command(BaseCommand):
         print(len(books))
         with ThreadPoolExecutor(max_workers=50) as executor:
             for i, j in paires_to_create:
-                executor.submit(self.traitement, i, j)
+                executor.submit(traitement, i, j)
         print('Jaccard distance created')
-
-    def traitement(self, i, j):
-        print(i, j)
-        book1 = Book.objects.get(gutenbergID=i)
-        book2 = Book.objects.get(gutenbergID=j)
-        jaccard_distance_i_j = jaccard_distance(get_index(i), i, get_index(j), j)
-        print('{} - {} : {}'.format(i, j, jaccard_distance_i_j))
-        JaccardDistance(idBook1=book1, idBook2=book2, distance=jaccard_distance_i_j).save()
-        JaccardDistance(idBook1=book2, idBook2=book1, distance=jaccard_distance_i_j).save()
-        print('Jaccard distance between book {} and {} is {}'.format(i, j, jaccard_distance_i_j))
