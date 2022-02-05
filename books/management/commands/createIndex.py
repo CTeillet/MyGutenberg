@@ -1,5 +1,4 @@
 import string
-import time
 from concurrent.futures import ThreadPoolExecutor
 
 from django.core.management import BaseCommand
@@ -22,12 +21,15 @@ def traitement(f, b, blacklist):
     print("Indexing words {}".format(len(index)))
     for word in index:
         if len(word) > 2 and not (word in blacklist):
-            print(w)
             w, _ = Words.objects.get_or_create(word=word)
-            IndexWords.objects.create(idBook=b, idWord=w, count=index[word])
+            try:
+                IndexWords.objects.create(idBook=b, idWord=w, count=index[word])
+            except:
+                pass
     print("Indexing done")
     b.indexed = True
     b.save()
+    f.close()
     print("Indexed: {}".format(b.title))
 
 
@@ -38,11 +40,11 @@ class Command(BaseCommand):
         print("Creating index")
         bs = Book.objects.filter(downloaded=True, indexed=False)
         print(bs)
-        blacklist = set(BlacklistWords.objects.all())
-        # with ThreadPoolExecutor(max_workers=12) as executor:
-        for b in bs:
-            print("Indexing book: {}".format(b.title))
-            with open("ressources/ebooks/{}.txt".format(b.gutenbergID), 'r', encoding="utf8") as f:
-                #executor.submit(traitement, f, b, blacklist)
-                traitement( f, b, blacklist)
+        blacklist = set(BlacklistWords.objects.all().values_list('word', flat=True))
+        print("Blacklist: {}".format(blacklist))
+        with ThreadPoolExecutor(max_workers=12) as executor:
+            for b in bs:
+                print("Indexing book: {}".format(b.title))
+                f = open("ressources/ebooks/{}.txt".format(b.gutenbergID), 'r', encoding="utf8")
+                executor.submit(traitement, f, b, blacklist)
         print("Index created")

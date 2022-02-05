@@ -1,6 +1,6 @@
-from ndfa import NDFA
-from regex_tree import RegExTree
-import regex_symbol as rs
+from research_RegEx.ndfa import NDFA
+from research_RegEx.regex_tree import RegExTree
+import research_RegEx.regex_symbol as rs
 
 
 def finish(i: int, automata: NDFA):

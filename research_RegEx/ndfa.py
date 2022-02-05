@@ -1,6 +1,6 @@
 import numpy as np
-import regex_symbol as rs
-import regex_tree as rt
+from research_RegEx import regex_symbol as rs
+from research_RegEx import regex_tree as rt
 
 
 class NDFA:

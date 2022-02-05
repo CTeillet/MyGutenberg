@@ -9,7 +9,6 @@ class TempDFA:
 
 
 class DFA:
-
     def __init__(self, dfa: TempDFA):
         self.size = len(dfa.grouped_states)
         self.accept = np.array(dfa.accept[:self.size], dtype=bool)
@@ -32,3 +31,28 @@ class DFA:
                 if self.transitions[i][col] != -1:
                     res += str(i) + ", " + chr(col) + " -> " + str(self.transitions[i][col]) + "\n"
         return res
+
+    def accept(self, s: str) -> bool:
+        dfa_index = 0
+        begin_dfa = 0
+        if self.accept[dfa_index]:
+            return True
+        i = 0
+        while i < len(s):
+            if ord(s[i]) > 255:
+                dfa_index = 0
+                begin_dfa += 1
+                i = begin_dfa
+            else:
+                val_transition = self.transitions[dfa_index][ord(s[i])]
+                if val_transition == -1:
+                    if dfa_index == 0:
+                        begin_dfa = i
+                    dfa_index = val_transition
+                    if self.accept[dfa_index]:
+                        return True
+                else:
+                    dfa_index = 0
+                    begin_dfa += 1
+                    i = begin_dfa
+        return False

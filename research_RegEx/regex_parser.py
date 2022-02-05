@@ -1,5 +1,5 @@
-import regex_tree as rt
-import regex_symbol as rs
+from research_RegEx import regex_tree as rt
+from research_RegEx import regex_symbol as rs
 
 
 def parse_expression(expression: str) -> rt.RegExTree:

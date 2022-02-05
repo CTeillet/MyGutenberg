@@ -1,7 +1,7 @@
 import numpy as np
 
-from dfa import TempDFA, DFA
-from ndfa import NDFA
+from research_RegEx.dfa import TempDFA, DFA
+from research_RegEx.ndfa import NDFA
 
 
 def grouping_by_epsilon(automata: NDFA, state: int):

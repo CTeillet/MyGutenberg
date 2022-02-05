@@ -1,7 +1,7 @@
 from django.core.management import BaseCommand
 from django.db import IntegrityError
 
-from books.models import Book, BlacklistWords
+from books.models import BlacklistWords
 
 
 class Command(BaseCommand):
