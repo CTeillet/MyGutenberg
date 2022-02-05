@@ -2,7 +2,7 @@ from research.regex.regex_symbol import CONCAT, ETOILE, ALTERN, DOT
 
 
 class RegExTree:
-    def __init__(self, root, sub_trees):
+    def __init__(self, root: chr, sub_trees):
         self.root = root
         self.sub_trees = sub_trees
 
@@ -20,9 +20,9 @@ class RegExTree:
     def to_string(self):
         if len(self.sub_trees) == 0:
             return self.root_to_chr()
-        result = self.root_to_chr() + "(" + self.sub_trees[0].toString()
-        for st in self.sub_trees:
-            result += st.toString() + ","
+        result = self.root_to_chr() + "(" + self.sub_trees[0].to_string()
+        for st in self.sub_trees[1:]:
+            result += "," + st.to_string()
         return result + ")"
 
     def __str__(self):

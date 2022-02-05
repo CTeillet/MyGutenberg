@@ -1,8 +1,15 @@
 import requests
 from django.core.management import BaseCommand
 
-from books.models import Book
+from books.models import Book, ClickedBook
 
+
+def download_book(book):
+    r = requests.get(book.download_link, stream=True)
+    open('ressources/ebooks/' + str(book.gutenbergID) + '.txt', 'wb').write(r.content)
+    book.downloaded = True
+    ClickedBook(idBook=book).save()
+    book.save()
 
 class Command(BaseCommand):
     help = 'Download books from the Gutenberg Project'
@@ -15,13 +22,9 @@ class Command(BaseCommand):
         else:
             nb_books_downloaded = len(Book.objects.filter(downloaded=True))
             i = 0
-            while nb_books_downloaded + i < 4000:
+            while nb_books_downloaded + i < 2000:
                 print('Downloading book ' + bs[i].title)
-                self.download_book(bs[i])
+                download_book(bs[i])
                 i += 1
 
-    def download_book(self, book):
-        r = requests.get(book.download_link, stream=True)
-        open('ressources/ebooks/' + str(book.gutenbergID) + '.txt', 'wb').write(r.content)
-        book.downloaded = True
-        book.save()
+

@@ -5,20 +5,25 @@ import regex_symbol as rs
 def parse_expression(expression: str) -> rt.RegExTree:
     result = []
     for c in expression:
-        result.append(rt.RegExTree(rs.char_to_root(c)), [])
+        print(c)
+        result.append(rt.RegExTree(rs.char_to_root(c), []))
     return parse(result)
 
 
 def parse(result) -> rt.RegExTree:
+    print(result, "0")
     while contain_parenthese(result):
         result = process_parenthese(result)
+    print(result, "1")
     while contain_etoile(result):
         result = process_etoile(result)
+    print( len(result[0].sub_trees), "2")
     while contain_concat(result):
         result = process_concat(result)
+    print(result, "3")
     while contain_altern(result):
         result = process_altern(result)
-
+    print(result, "4")
     if len(result) > 1:
         raise Exception
     return remove_protection(result[0])
@@ -76,13 +81,13 @@ def process_etoile(trees):
             results.append(rt.RegExTree(rs.ETOILE, sub_trees))
         else:
             results.append(t)
-        return results
+    return results
 
 
 def contain_concat(trees):
     found = False
     for t in trees:
-        if (not found) and t.root == rs.CONCAT:
+        if (not found) and t.root != rs.ALTERN:
             found = True
             continue
         if found:
@@ -90,7 +95,7 @@ def contain_concat(trees):
                 return True
             else:
                 found = False
-        return False
+    return False
 
 
 def process_concat(trees):
@@ -98,7 +103,7 @@ def process_concat(trees):
     found = False
     first_found = False
     for t in trees:
-        if (not found) and (not first_found) and t.root == rs.ALTERN:
+        if (not found) and (not first_found) and t.root != rs.ALTERN:
             first_found = True
             result.append(t)
             continue
@@ -120,13 +125,13 @@ def contain_altern(trees):
     for t in trees:
         if t.root == rs.ALTERN and len(t.sub_trees) == 0:
             return True
-        return False
+    return False
 
 
 def process_altern(trees):
     result = []
     found = False
-    left = None
+    left: rt.RegExTree = None
     done = False
     for t in trees:
         if (not found) and t.root == rs.ALTERN and len(t.sub_trees) == 0:
@@ -149,7 +154,7 @@ def process_altern(trees):
 def remove_protection(tree):
     if tree.root == rs.PROTECTION and len(tree.sub_trees) != 1:
         raise Exception
-    if len(tree.getSubTrees()) == 0:
+    if len(tree.sub_trees) == 0:
         return tree
     if tree.root == rs.PROTECTION:
         return remove_protection(tree.sub_trees()[0])

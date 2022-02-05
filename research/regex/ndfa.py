@@ -16,14 +16,14 @@ class NDFA:
         result = "Initial state: 0\nFinal state: " + str(self.end) + "\nTransition list:\n"
         i = 0
         for e in self.epsilon_transitions:
-            i += 1
             if e is not None:
                 for state in e:
-                    result += "  " + chr(i) + " -- epsilon --> " + state + "\n"
+                    result += "  " + str(i) + " -- epsilon --> " + str(state) + "\n"
+            i += 1
         for i in range(len(self.transition_table)):
             for col in range(256):
                 if self.transition_table[i][col] != -1:
-                    result += "  " + chr(i) + " -- " + chr(col) + " --> " + self.transition_table[i][col] + "\n"
+                    result += "  " + str(i) + " -- " + chr(col) + " --> " + str(self.transition_table[i][col]) + "\n"
         return result
 
     def increment_size(self, *, n=1):

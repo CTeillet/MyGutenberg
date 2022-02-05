@@ -36,8 +36,8 @@ def parse_ndfa_node(rg_tree, automata, can_finish):
     return
 
 
-def process_leaf(rg_tree, automata, can_finish):
-    if not (rg_tree.root.isalpha() or rg_tree.root.isdigit()):
+def process_leaf(rg_tree: RegExTree, automata, can_finish):
+    if not (chr(rg_tree.root).isalnum()):
         print("Error : A Leaf is not a Letter or a Digit", rg_tree.root)
     automata.epsilon_transitions[automata.sz] = []
     # the state have a transition with the end
@@ -57,6 +57,7 @@ def process_leaf(rg_tree, automata, can_finish):
 
 
 def process_altern(rg_tree, automata, can_finish):
+    print("automata.sz", automata.sz)
     my_id = automata.sz
     automata.epsilon_transitions[my_id] = []
 

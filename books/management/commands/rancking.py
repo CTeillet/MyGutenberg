@@ -1,15 +1,53 @@
 from books.models import JaccardDistance
 
-nb_books = 103
 
-
-def crank(node):
-    distances = list(JaccardDistance.objects.filter(idBook1=node).values_list('distance')) + list(JaccardDistance.objects.filter(idBook2=node).values_list('distance'))
+def closeness_rank(node, nb_books):
+    distances = list(JaccardDistance.objects.filter(idBook1=node).values_list('distance')) + \
+                list(JaccardDistance.objects.filter(idBook2=node).values_list('distance'))
     s = 0
     for i in distances:
-        print(i)
+        # print(i)
         s += i[0]
     return (nb_books - 1) / s
 
-print(crank(1))
+# print(closeness_rank(1, 103))
 
+
+def parcours_closeness():
+    books = list(JaccardDistance.objects.all().values_list('idBook1', 'idBook2', 'distance'))
+    sums = dict()
+
+    for (i, j, d) in books:
+        if i not in sums:
+            sums[i] = d
+        else:
+            sums[i] += d
+        if j not in sums:
+            sums[j] = d
+        else:
+            sums[j] += d
+
+    for i in sums:
+        sums[i] = (len(sums) - 1) / sums[i]
+    return sums
+
+temp = parcours_closeness()
+max = 0
+max_id = 0
+for i in temp:
+    if temp[i] > max:
+        max = temp[i]
+        max_id = i
+
+print(max)
+print(parcours_closeness())
+
+def betweenness():
+    books = list(JaccardDistance.objects.all().values_list('idBook1', 'idBook2', 'distance'))
+    graph = dict()
+
+    for (i, j, d) in books:
+        if i not in graph:
+            graph[i] = list()
+        if d < 60:
+            graph[i].append(j)

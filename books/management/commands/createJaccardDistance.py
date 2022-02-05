@@ -12,26 +12,25 @@ def get_index(i):
 
 def jaccard_distance(list1, idBook1, list2, idBook2):
     """Calculate the Jaccard distance between two lists of words."""
+    dictWords = dict()  # Dictionnary of the words
+    dictWords["word"] = (10, 0)
     words_1 = set(map(lambda x: x[0], list1))
     words_2 = set(map(lambda x: x[0], list2))
     words_union = words_1.union(words_2)
+    for (word, count) in list1:
+        dictWords[word] = (count, 0)
+    for (word, count) in list2:
+        if word in dictWords:
+            dictWords[word] = (max(dictWords[word][0], count), min(dictWords[word][0], count))
+        else:
+            dictWords[word] = (count, 0)
     top = 1
     bottom = 1
     for word in words_union:
-        nb_word_book1 = find_nb(idBook1, word)
-        nb_word_book2 = find_nb(idBook2, word)
-        top += max(nb_word_book1, nb_word_book2) - min(nb_word_book1, nb_word_book2)
-        bottom += max(nb_word_book1, nb_word_book2)
+        nb_word_book1, nb_word_book2 = dictWords[word]
+        top += nb_word_book1 - nb_word_book2
+        bottom += nb_word_book1
     return int(top / bottom * 100)
-
-
-def find_nb(idBook, idWord):
-    """Find the number of occurrences of the word in the book."""
-    try:
-        res = IndexWords.objects.get(idBook=idBook, idWord=idWord).count
-    except IndexWords.DoesNotExist:
-        res = 0
-    return res
 
 
 def traitement(i, j):
@@ -54,7 +53,7 @@ class Command(BaseCommand):
         paires_exist = JaccardDistance.objects.values_list('idBook1', 'idBook2').distinct()
         paires_to_create = [paire for paire in paires_max if paire not in paires_exist]
         print(len(books))
-        with ThreadPoolExecutor(max_workers=50) as executor:
+        with ThreadPoolExecutor(max_workers=12) as executor:
             for i, j in paires_to_create:
                 executor.submit(traitement, i, j)
         print('Jaccard distance created')

@@ -8,7 +8,7 @@ PARENTHESEFERMANT = 0x51515151
 DOT = 0xD07
 
 
-def char_to_root(c):
+def char_to_root(c: chr) -> int:
     if c == '.':
         return DOT
     elif c == '*':
@@ -16,7 +16,9 @@ def char_to_root(c):
     if c == '|':
         return ALTERN
     if c == '(':
+        print('PARENTHESE OUVRANTE')
         return PARENTHESEOUVRANT
     if c == ')':
+        print('PARENTHESE FERMANTE')
         return PARENTHESEFERMANT
-    return int(c)
+    return ord(c)

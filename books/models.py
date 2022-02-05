@@ -64,3 +64,16 @@ class JaccardDistance(models.Model):
 
     def __str__(self):
         return str(self.idBook1) + ' - ' + str(self.idBook2)
+
+
+class ClickedBook(models.Model):
+    idBook = models.ForeignKey(Book, on_delete=models.CASCADE)
+    count = models.IntegerField(default=0)
+
+    class Meta:
+        ordering = ('idBook',)
+        unique_together = ('idBook',)
+
+    def __str__(self):
+        return self.idBook.title
+

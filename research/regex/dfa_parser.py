@@ -16,6 +16,7 @@ def grouping_by_epsilon(automata: NDFA, state: int):
 
 def parse_dfa(automata: NDFA):
     dfa = TempDFA(automata.sz)
+
     dfa.grouped_states.append(grouping_by_epsilon(automata, 0))
     parse_dfa_node(dfa, automata, 0)
     return DFA(dfa)
@@ -35,8 +36,9 @@ def parse_dfa_node(dfa, ndfa, i):
                 dfa.transitions[i][col] = gs
                 # add the set if it's a new one
                 if gs not in dfa.grouped_states:
-                    dfa.append(gs)
+                    dfa.grouped_states.append(gs)
         # update accept
+        print(len(dfa.accept))
         dfa.accept[i] = dfa.accept[i] or ndfa.accept[state]
     parse_dfa_node(dfa, ndfa, i + 1)
 
