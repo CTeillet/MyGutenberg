@@ -4,6 +4,8 @@ from dfa import TempDFA, DFA
 from ndfa import NDFA
 
 
+# Parse
+
 def grouping_by_epsilon(automata: NDFA, state: int):
     res = {state}
     if automata.epsilon_transitions[state] is not None:
@@ -16,9 +18,9 @@ def grouping_by_epsilon(automata: NDFA, state: int):
 
 def parse_dfa(automata: NDFA):
     dfa = TempDFA(automata.sz)
-
     dfa.grouped_states.append(grouping_by_epsilon(automata, 0))
     parse_dfa_node(dfa, automata, 0)
+    print(dfa.grouped_states)
     return DFA(dfa)
 
 
@@ -29,22 +31,26 @@ def parse_dfa_node(dfa, ndfa, i):
 
     # Search all the transitions from the set
     for state in dfa.grouped_states[i]:
+        n = ndfa.transition_table[state]
         for col in range(len(ndfa.transition_table[state])):
-            if ndfa.transition_table[state][col] is not None:
+            if ndfa.transition_table[state][col] != -1:
                 # update the transition table
                 gs = grouping_by_epsilon(ndfa, ndfa.transition_table[state][col])
+                print(i, state, col, gs)
                 dfa.transitions[i][col] = gs
                 # add the set if it's a new one
                 if gs not in dfa.grouped_states:
+                    print("append :", gs)
                     dfa.grouped_states.append(gs)
         # update accept
-        print(len(dfa.accept))
         dfa.accept[i] = dfa.accept[i] or ndfa.accept[state]
     parse_dfa_node(dfa, ndfa, i + 1)
 
 
-# Minimization
+# --------------------------------------------------------------
 
+
+# Minimization
 
 def grouping_minimization(min_table, state, res):
     res.add(state)
@@ -146,11 +152,3 @@ def minimize_dfa(dfa: DFA):
         i += 1
     dfa.accept = accept_res
     dfa.transitions = transitions_res
-
-
-
-
-
-
-
-

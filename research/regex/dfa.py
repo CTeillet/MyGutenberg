@@ -30,5 +30,5 @@ class DFA:
         for i in range(self.size):
             for col in range(256):
                 if self.transitions[i][col] != -1:
-                    res += str(i) + ", " + chr(col) + " -> " + str(self.transitions[i][col]) + "\n"
+                    res += str(i) + " -- " + chr(col) + " --> " + str(self.transitions[i][col]) + "\n"
         return res
