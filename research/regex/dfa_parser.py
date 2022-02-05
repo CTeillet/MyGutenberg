@@ -20,7 +20,6 @@ def parse_dfa(automata: NDFA):
     dfa = TempDFA(automata.sz)
     dfa.grouped_states.append(grouping_by_epsilon(automata, 0))
     parse_dfa_node(dfa, automata, 0)
-    print(dfa.grouped_states)
     return DFA(dfa)
 
 
@@ -31,16 +30,13 @@ def parse_dfa_node(dfa, ndfa, i):
 
     # Search all the transitions from the set
     for state in dfa.grouped_states[i]:
-        n = ndfa.transition_table[state]
         for col in range(len(ndfa.transition_table[state])):
             if ndfa.transition_table[state][col] != -1:
                 # update the transition table
                 gs = grouping_by_epsilon(ndfa, ndfa.transition_table[state][col])
-                print(i, state, col, gs)
                 dfa.transitions[i][col] = gs
                 # add the set if it's a new one
                 if gs not in dfa.grouped_states:
-                    print("append :", gs)
                     dfa.grouped_states.append(gs)
         # update accept
         dfa.accept[i] = dfa.accept[i] or ndfa.accept[state]
@@ -123,7 +119,9 @@ def minimize_dfa(dfa: DFA):
     min_table = get_min_table(dfa)
     # make the link between an old state and a group
     old_sets = np.full(dfa.size, None, dtype=set)
+    # make the link between a new state and a group of old states
     new_sets = []
+    # extract all the groups
     for i in range(dfa.size):
         if old_sets[i] is None:
             g = set()
@@ -133,7 +131,6 @@ def minimize_dfa(dfa: DFA):
             new_sets.append(g)
 
     sz = len(new_sets)
-
     if sz == old_sets.size:
         return
 
@@ -150,5 +147,6 @@ def minimize_dfa(dfa: DFA):
                 transitions_res[i][col] = new_state
         accept_res[i] = dfa.accept[line]
         i += 1
+    dfa.size = sz
     dfa.accept = accept_res
     dfa.transitions = transitions_res
