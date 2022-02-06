@@ -16,5 +16,5 @@ def generate_dfa(expression: str):
     #print('minimized dfa', dfa)
     return dfa
 
-print(generate_dfa("baba|are").apply("bareknuckle"))
+print(generate_dfa("united|play").apply("pierres"))
 
