@@ -1,5 +1,6 @@
 from django.core.serializers.json import DjangoJSONEncoder
 from django.core import serializers
+from django.db.models import Q
 
 from django.http import JsonResponse
 from iso639 import Lang
@@ -7,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from django.core import serializers
-from books.models import Book, Words, IndexWords
+from books.models import Book, Words, IndexWords, JaccardDistance, ClickedBook
 from books.serializers import BookSerializer
 from research_RegEx.regex import generate_dfa
 
@@ -107,10 +108,29 @@ class LanguageView(APIView):
 
 class ShowBook(APIView):
     def get(self, request, book_id):
+        book = [Book.objects.get(gutenbergID=book_id)]
+        json = BookSerializer(book, many=True).data
+        return Response(json)
+
+
+class Getbook(APIView):
+    def get(self, request, book_id):
         book = Book.objects.get(gutenbergID=book_id)
+        cl, _ = ClickedBook.objects.get_or_create(idBook=book)
+        cl.count = cl.count + 1
+        cl.save()
         json = BookSerializer(book).data
         return Response(json)
 
+
+class GetSimilarBooks(APIView):
+    def get(self, request, book_id):
+        book = Book.objects.get(gutenbergID=book_id)
+        min_jaccard = JaccardDistance.objects.filter(Q(idBook1=book) | Q(idBook2=book)).order_by('distance')[:5]
+        ids = [e.idBook2.gutenbergID if e.idBook1 != book.gutenbergID else e.idBook1.gutenbergID for e in min_jaccard]
+        book_jaccard = Book.objects.filter(gutenbergID__in=ids)
+        json = BookSerializer(book_jaccard, many=True).data
+        return Response(json)
 
 class SearchBookLanguage(APIView):
     def get(self, request, word_req, lang):

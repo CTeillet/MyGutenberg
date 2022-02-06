@@ -1,7 +1,7 @@
 from django.urls import path
 
 from .views import BooksView, SearchBook, AdvancedSearchBook, SearchBookByLanguage, AddBookClick, SearchByTitle, \
-    LanguageView, ShowBook
+    LanguageView, ShowBook, Getbook, GetSimilarBooks
 
 urlpatterns = [
     path('', BooksView.as_view(), name='books'),
@@ -12,4 +12,6 @@ urlpatterns = [
     path('search-title/<str:title>', SearchByTitle.as_view(), name='search-title'),
     path('languages', LanguageView.as_view(), name='languages'),
     path('<int:book_id>', ShowBook.as_view(), name='book-detail'),
+    path('book/<int:book_id>', Getbook.as_view(), name='get-detail'),
+    path('similar/<int:book_id>', GetSimilarBooks.as_view(), name='get-similar'),
 ]
