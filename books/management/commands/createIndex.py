@@ -42,9 +42,10 @@ class Command(BaseCommand):
         print(bs)
         blacklist = set(BlacklistWords.objects.all().values_list('word', flat=True))
         print("Blacklist: {}".format(blacklist))
-        with ThreadPoolExecutor(max_workers=12) as executor:
-            for b in bs:
-                print("Indexing book: {}".format(b.title))
-                f = open("ressources/ebooks/{}.txt".format(b.gutenbergID), 'r', encoding="utf8")
-                executor.submit(traitement, f, b, blacklist)
+        #with ThreadPoolExecutor(max_workers=12) as executor:
+        for b in bs:
+            print("Indexing book: {}".format(b.title))
+            f = open("ressources/ebooks/{}.txt".format(b.gutenbergID), 'r', encoding="utf8")
+            #executor.submit(traitement, f, b, blacklist)
+            traitement( f, b, blacklist)
         print("Index created")
