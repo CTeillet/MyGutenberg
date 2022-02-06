@@ -32,7 +32,7 @@ class DFA:
                     res += str(i) + " -- " + chr(col) + " --> " + str(self.transitions[i][col]) + "\n"
         return res
 
-    def accept(self, s: str) -> bool:
+    def apply(self, s: str) -> bool:
         dfa_index = 0
         begin_dfa = 0
         if self.accept[dfa_index]:

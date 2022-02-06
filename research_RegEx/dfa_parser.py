@@ -39,7 +39,7 @@ def parse_dfa_node(dfa, ndfa, i):
                 if gs not in dfa.grouped_states:
                     dfa.grouped_states.append(gs)
         # update accept
-        dfa.accept[i] = dfa.accept[i] or ndfa.accept[state]
+        dfa.apply[i] = dfa.apply[i] or ndfa.apply[state]
     parse_dfa_node(dfa, ndfa, i + 1)
 
 

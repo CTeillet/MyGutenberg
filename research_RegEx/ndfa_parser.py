@@ -48,7 +48,7 @@ def process_leaf(rg_tree: RegExTree, automata, can_finish):
             # create end
             automata.increment_size()
             automata.end = automata.sz
-            automata.accept[automata.sz] = True
+            automata.apply[automata.sz] = True
         automata.transition_table[my_id][rg_tree.root] = automata.end
     # create new state
     else:

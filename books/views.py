@@ -62,7 +62,7 @@ class AdvancedSearchBook(APIView):
             dfa = generate_dfa(expression)
             res = set()
             for word in words:
-                if dfa.accept(word):
+                if dfa.apply(word):
                     res_word = IndexWords.objects.filter(idWord_id=word)
                     for indexWord in res_word:
                         b = Book.objects.get(gutenbergID=indexWord.idBook_id)
