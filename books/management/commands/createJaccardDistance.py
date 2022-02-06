@@ -10,27 +10,25 @@ def get_index(i):
     return list(IndexWords.objects.filter(idBook=i).values_list('idWord', 'count'))
 
 
-def jaccard_distance(list1, idBook1, list2, idBook2):
+def jaccard_distance(list1, list2):
     """Calculate the Jaccard distance between two lists of words."""
-    dictWords = dict()  # Dictionnary of the words
-    dictWords["word"] = (10, 0)
-    words_1 = set(map(lambda x: x[0], list1))
-    words_2 = set(map(lambda x: x[0], list2))
-    words_union = words_1.union(words_2)
+    dict_words = dict()  # Dictionnary of the words
     for (word, count) in list1:
-        dictWords[word] = (count, 0)
+        dict_words[word] = (count, 0)
     for (word, count) in list2:
-        if word in dictWords:
-            dictWords[word] = (max(dictWords[word][0], count), min(dictWords[word][0], count))
+        if word in dict_words:
+            dict_words[word] = (max(dict_words[word][0], count), min(dict_words[word][0], count))
         else:
-            dictWords[word] = (count, 0)
+            dict_words[word] = (count, 0)
     top = 1
     bottom = 1
-    for word in words_union:
-        nb_word_book1, nb_word_book2 = dictWords[word]
+    for word, (nb_word_book1, nb_word_book2) in dict_words:
         top += nb_word_book1 - nb_word_book2
         bottom += nb_word_book1
     return int(top / bottom * 100)
+
+
+
 
 
 def traitement(i, j):

@@ -39,15 +39,3 @@ for i in temp:
         max = temp[i]
         max_id = i
 
-print(max)
-print(parcours_closeness())
-
-def betweenness():
-    books = list(JaccardDistance.objects.all().values_list('idBook1', 'idBook2', 'distance'))
-    graph = dict()
-
-    for (i, j, d) in books:
-        if i not in graph:
-            graph[i] = list()
-        if d < 60:
-            graph[i].append(j)
