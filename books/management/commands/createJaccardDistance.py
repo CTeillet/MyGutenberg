@@ -28,14 +28,11 @@ def jaccard_distance(list1, list2):
     return int(top / bottom * 100)
 
 
-
-
-
 def traitement(i, j):
     print(i, j)
     book1 = Book.objects.get(gutenbergID=i)
     book2 = Book.objects.get(gutenbergID=j)
-    jaccard_distance_i_j = jaccard_distance(get_index(i), i, get_index(j), j)
+    jaccard_distance_i_j = jaccard_distance(get_index(i), get_index(j))
     print('{} - {} : {}'.format(i, j, jaccard_distance_i_j))
     JaccardDistance(idBook1=book1, idBook2=book2, distance=jaccard_distance_i_j).save()
     print('Jaccard distance between book {} and {} is {}'.format(i, j, jaccard_distance_i_j))
