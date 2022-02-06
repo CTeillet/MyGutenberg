@@ -32,27 +32,56 @@ class DFA:
                     res += str(i) + " -- " + chr(col) + " --> " + str(self.transitions[i][col]) + "\n"
         return res
 
-    def apply(self, s: str) -> bool:
+    def apply(self, string: str) -> bool:
         dfa_index = 0
         begin_dfa = 0
         if self.accept[dfa_index]:
             return True
         i = 0
-        while i < len(s):
-            if ord(s[i]) > 255:
+        while i < len(string):
+            s = string[i]
+            if ord(s) > 255:
                 dfa_index = 0
-                begin_dfa += 1
                 i = begin_dfa
+                begin_dfa += 1
             else:
-                val_transition = self.transitions[dfa_index][ord(s[i])]
-                if val_transition == -1:
+
+                val_transition = self.transitions[dfa_index][ord(s)]
+                if val_transition != -1:
                     if dfa_index == 0:
-                        begin_dfa = i
+                        begin_dfa = i + 1
                     dfa_index = val_transition
                     if self.accept[dfa_index]:
                         return True
+                    i += 1
                 else:
                     dfa_index = 0
-                    begin_dfa += 1
                     i = begin_dfa
+                    begin_dfa += 1
+
+        return False
+
+    def apply_simple(self, string: str):
+        dfa_index = 0
+        if self.accept[dfa_index]:
+            return True
+
+        for s in string:
+            if ord(s) > 255:
+                dfa_index = 0
+
+            else:
+                val_transition = self.transitions[dfa_index][ord(s)]
+                if val_transition != -1:
+                    dfa_index = val_transition
+                    if self.accept[dfa_index]:
+                        return True
+                elif dfa_index != 0:
+                    dfa_index = 0
+                    val_transition = self.transitions[dfa_index][ord(s)]
+                    if val_transition != -1:
+                        dfa_index = val_transition
+                        if self.accept[dfa_index]:
+                            return True
+
         return False

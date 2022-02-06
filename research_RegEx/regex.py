@@ -7,13 +7,14 @@ from research_RegEx.dfa_parser import parse_dfa, minimize_dfa
 
 def generate_dfa(expression: str):
     rt = parse_expression(expression)
-    print('rt', rt)
+    #print('rt', rt)
     ndfa = parse_ndfa(rt)
-    # print('ndfa', ndfa)
+    #print('ndfa', ndfa)
     dfa = parse_dfa(ndfa)
-    # print('dfa', dfa)
-    minimize_dfa(dfa)
-    # print('minimized dfa', dfa)
+    #print('dfa', dfa)
+    #minimize_dfa(dfa)
+    #print('minimized dfa', dfa)
     return dfa
 
-# generate_dfa("a|bc*")
+print(generate_dfa("baba|are").apply("bareknuckle"))
+
